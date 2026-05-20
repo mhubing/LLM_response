@@ -38,10 +38,16 @@
 - 信任谁？（TCB 包括什么？）
 - 不防什么？（侧信道？拒绝服务？物理攻击？）
 
-**核心机制**
+**Insight 层（1 个问题）**
 - 它的 key insight 用一句话能不能讲清？
+
+**Mechanism 层（3 个问题）**
+- 整体架构是什么？关键组件有哪些？
 - 关键设计选择有哪些？每个选择的 trade-off 是什么？为什么不选另一种？
-- 哪些是新东西，哪些是已有技术的组合？
+- 关键流程（进入 / 退出 / 异常 / 攻击防御）是怎么走的？
+
+**Novelty 层（1 个问题，横跨各层）**
+- 这套方案里哪些是新东西，哪些是已有技术的组合？已有技术为什么之前没这么用？
 
 **实现栈**
 - 跑在什么上面？（QEMU / FPGA / 真实硬件 / gem5？）
@@ -81,7 +87,7 @@
 
 "Insight" 这个词在论文里是个**高频但很虚**的词，刚开始读会觉得"作者总说 our key insight is...，到底什么算 insight？"。我分几个层次讲清楚。
 
-### 一、Insight 的核心含义
+### 6.1、Insight 的核心含义
 
 Insight 在论文语境下，指的是**作者发现的一个"别人没注意到、或没用好"的关键观察，这个观察让原本难解的问题变得可解**。
 
@@ -94,7 +100,7 @@ Insight 在论文语境下，指的是**作者发现的一个"别人没注意到
 
 一个好的 insight 通常能用一句话讲清，听完之后让人有"哦，对啊，这样确实可以"的感觉。它像是杠杆的支点——支点找对了，design 就自然顺出来了。
 
-### 二、Insight 通常出现在哪几类地方
+### 6.2、Insight 通常出现在哪几类地方
 
 在 system / 安全论文里，insight 一般是下面几类观察之一：
 
@@ -132,7 +138,7 @@ Insight 在论文语境下，指的是**作者发现的一个"别人没注意到
 - 例："大家默认隔离必须靠特权级，但其实在同特权级下用 X 也能做到"。
 - 例："大家默认 TEE 中断处理必须切世界，但其实可以..."
 
-### 三、怎么从论文里识别 insight
+### 6.3、怎么从论文里识别 insight
 
 几个识别信号：
 
@@ -149,7 +155,7 @@ Insight 在论文语境下，指的是**作者发现的一个"别人没注意到
 
 **和 design 的关系**。读完 insight 之后再读 design，应该有"design 是 insight 的自然推论"的感觉。如果 design 看起来还是很复杂、和 insight 关系不大，那要么是你没读懂 insight，要么这个 insight 其实没那么核心。
 
-### 四、Insight ≠ Contribution
+### 6.4、Insight ≠ Contribution
 
 这两个经常被混淆，但严格来说差别很大：
 
@@ -164,7 +170,7 @@ Insight 在论文语境下，指的是**作者发现的一个"别人没注意到
 - **Insight**: "EPT 可以在不切换特权级的前提下提供另一套地址空间"
 - **Contributions**: 设计了基于此 insight 的隔离系统 X、实现于 KVM、评估表明开销 < 5%
 
-### 五、对你写论文的启发
+### 6.5、对你写论文的启发
 
 你之前提到要"按 SKEE/TIDE/CKI 的口径写"，这里有个写作技巧：**每篇相关工作你都应该能用一句 insight 概括它**。比如：
 
@@ -173,3 +179,74 @@ Insight 在论文语境下，指的是**作者发现的一个"别人没注意到
 - CKI 的 insight：（按它自己的描述提取）
 
 然后**你自己工作的 insight 要能和它们形成对照**——"它们靠 X，我们的 insight 是 Y，因此我们能做到 Z 而它们不能"。这是 related work 段落最有力的写法。
+
+## 七、Contribution 的作用
+Contribution看的时机和方式很有讲究——它**不是用来"学技术"的，是用来"做决策"的**。我按读论文的不同阶段讲清楚什么时候看、怎么看。
+
+### 7.1、第一遍读时（5–10 分钟）：必看，用来过滤
+
+这是 contribution 最主要的用途——**决定要不要继续读这篇论文**。
+
+具体动作：读完 abstract 之后，直接跳到 intro 末尾找 contribution list（通常是 bullet point，"We make the following contributions:"），花 1–2 分钟扫一遍。
+
+读完问自己三个问题：
+- 这些 claim 里有没有我关心的？
+- 如果有，是 main contribution 还是顺带提的？
+- 是否值得花时间读第二遍？
+
+如果都不相关，**这篇论文到此为止**，记一个 one-liner 存档就行。如果有相关的，标记出来是哪一条，第二遍读时重点看对应的 section。
+
+### 7.2、第二遍读时：略看，用来校准
+
+第二遍读 design / evaluation 时，contribution 退到**辅助位置**，但还是要回头看一眼，用来校准你对论文的理解。
+
+具体动作：读完 design 和 evaluation 后，**回头**再看一眼 contribution list，问：
+- 我读到的 design 是不是支撑了它声称的每条 contribution？
+- 有没有它 claim 了但其实没做扎实的？（这是论文的弱点）
+- 有没有它做了但没在 contribution 里强调的？（这往往是它自己都没意识到的真正价值）
+
+这一步是**审稿式读法**——用 contribution 当 checklist 去对账。
+
+## 7.3、写 related work 时：必看，用来引用
+
+当你要在自己论文里引用这篇时，contribution 是**最直接的素材**。
+
+具体动作：从它的 contribution list 里挑出**和你最相关的那 1–2 条**，转化成你的 related work 句式。
+
+例如它的 contribution 是 "We propose the first hardware-assisted intra-kernel isolation mechanism"，你写：
+> "Prior work [X] proposes hardware-assisted intra-kernel isolation, but it relies on Y and does not handle Z."
+
+注意：**不要照抄它的 contribution 措辞**（那是它的营销话术），要用中性描述 + 你的对比角度重写。
+
+## 7.4、写自己论文时：反复看，用来对标
+
+这是最关键也最被忽视的用途——**你写自己的 contribution list 时，要把对标论文的 contribution 摆在旁边一起改**。
+
+具体动作：
+- 把 SKEE / TIDE / CKI 的 contribution list 抄到一个文档里
+- 对每一条，写一句"我的工作和它的差别 / 优势"
+- 然后把这些差别**反过来**就是你自己的 contribution 措辞
+
+这样写出来的 contribution 自然就是"对标已有工作 + 突出自己 novelty"的，审稿人一看就明白你的定位。
+
+## 7.5、决定投稿层次时：必看
+
+这点对你现在很有用。判断**目标会议接受什么样的 contribution** 的最快方法，就是去翻该会议近 2–3 年同类论文的 contribution list。
+
+具体动作：找 3–5 篇 ASPLOS / OSDI / S&P 上和你方向最近的论文，把它们的 contribution list 列在一起，看：
+- 它们的 contribution 通常包含几条？（一般 4 条左右）
+- 每条的"分量"——是机制创新、性能数字、还是新威胁模型？
+- 实现栈层次——是真硬件、FPGA、模拟器、还是软件原型？
+- evaluation 规模——benchmark 数量、对比 baseline 数量
+
+这能让你**反推你的工作做到什么程度才够投这个会**。比 reading guideline 直接得多。
+
+## 7.6、什么时候不用看 contribution
+
+- **第三遍精读时**：这时你要吃透 design 和 implementation，contribution 已经过了它的用途，不用反复看。
+- **学技术细节时**：contribution 不教技术，design / implementation section 才教。
+- **了解一个新领域 background 时**：看 survey 或者多篇论文的 intro，比看任何单篇的 contribution 有用。
+
+## 总结成一句话
+
+**Contribution 不是用来读懂论文的，是用来定位论文的**——定位它在领域里的位置、定位它和你工作的关系、定位它对应的会议层次。所以它的看法是"扫"而不是"读"，但要在多个时机反复扫，每次目的不同。
