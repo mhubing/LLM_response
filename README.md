@@ -19,3 +19,5 @@ Record meaningful responses from the LLM
 [Linux IRQ 处理流程](https://github.com/mhubing/LLM_response/blob/main/Linux_IRQ.md)
 
 [QEMU 和 Firecracker 的 IO 半虚拟化实现](https://github.com/mhubing/LLM_response/blob/main/IO_paravirtualization.md)
+
+[用户线程、内核线程、用户线程进入内核](https://github.com/mhubing/LLM_response/blob/main/user_kernel_thread.md)
