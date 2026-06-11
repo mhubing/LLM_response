@@ -15,3 +15,7 @@ Record meaningful responses from the LLM
 [page cache 概念](https://github.com/mhubing/LLM_response/blob/main/page_cache.md)
 
 [Intel AEX 概念](https://github.com/mhubing/LLM_response/blob/main/Intel_AEX.md)
+
+[Linux IRQ 处理流程](https://github.com/mhubing/LLM_response/blob/main/Linux_IRQ.md)
+
+[QEMU 和 Firecracker 的 IO 半虚拟化实现](https://github.com/mhubing/LLM_response/blob/main/IO_paravirtualization.md)
