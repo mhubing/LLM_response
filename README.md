@@ -23,3 +23,5 @@ Record meaningful responses from the LLM
 10. [用户线程、内核线程、用户线程进入内核](https://github.com/mhubing/LLM_response/blob/main/user_kernel_thread.md)
 
 11. [ARM64 SVC调用时硬件状态变化](https://github.com/mhubing/LLM_response/blob/ac814ad39bf768323e3535dd88fbdd14bf2f5e20/arm64_svc_pstate.md)
+
+12. [查看服务器配置](https://github.com/mhubing/LLM_response/blob/main/server_info.md)
